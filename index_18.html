@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한솔마을 4단지 재건축 동의서 제출 안내</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  :root {
+    --green: #03C75A;
+    --green-dark: #02a84c;
+    --green-light: #e8faf0;
+    --green-mid: #c0ecd4;
+    --navy: #1a1f36;
+    --text: #191919;
+    --text-sub: #555;
+    --text-muted: #888;
+    --border: #e8e8e8;
+    --bg: #f8f9fa;
+    --white: #ffffff;
+    --sidebar-w: 240px;
+    --header-h: 56px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); font-size: 18px; line-height: 1.9; }
+
+  /* 헤더 */
+  .top-header {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 64px;
+    background: var(--navy);
+    border-bottom: 1px solid #253047;
+    display: flex; align-items: center;
+    padding: 0 28px; gap: 16px; z-index: 100;
+  }
+  .hd-div { width: 1px; height: 20px; background: #253047; margin: 0 4px; }
+  .hd-tag { font-size: 15px; color: #9ab; }
+
+  /* 사이드바 */
+  .sidebar {
+    position: fixed; top: 64px; left: 0;
+    width: 260px; height: calc(100vh - 64px);
+    background: var(--white); border-right: 1px solid var(--border);
+    overflow-y: auto; padding: 28px 0 40px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 90;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 80;
+  }
+  .sidebar-overlay.open { display: block; }
+  /* 메인 */
+  .content { margin-left: 0; margin-top: 64px; padding: 44px 52px 100px; max-width: 960px; transition: margin-left 0.3s ease; }
+  /* 푸터 */
+  .footer { margin-left: 0; background: var(--white); border-top: 1px solid var(--border); padding: 22px 52px; font-size: 15px; color: var(--text-muted); transition: margin-left 0.3s ease; }
+  .sb-label { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; padding: 0 22px 10px 22px; text-transform: uppercase; }
+  .sb-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 22px 12px 26px; font-size: 16px; color: var(--text-sub);
+    text-decoration: none; border-left: 3px solid transparent;
+    transition: all 0.15s; cursor: pointer;
+  }
+  .sb-link:hover { color: var(--green); background: var(--green-light); }
+  .sb-link.active { color: var(--green); font-weight: 700; border-left-color: var(--green); background: var(--green-light); }
+  .sb-dot { display: none; }
+  .sb-hr { border: none; border-top: 1px solid var(--border); margin: 14px 22px; }
+
+  /* 브레드크럼 */
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .breadcrumb .sep { color: #ccc; }
+  .breadcrumb .cur { color: var(--text-sub); }
+
+  /* 타이틀 */
+  .page-title-block { border-bottom: 1px solid var(--border); padding-bottom: 28px; margin-bottom: 36px; }
+  .page-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--green-light); color: var(--green-dark);
+    font-size: 13px; font-weight: 700; padding: 4px 12px;
+    border-radius: 100px; margin-bottom: 14px; letter-spacing: 0.04em;
+  }
+  .page-badge::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+  .page-title { font-size: 32px; font-weight: 700; line-height: 1.4; margin-bottom: 12px; }
+  .page-desc { font-size: 17px; color: var(--text-sub); line-height: 1.85; }
+
+  /* 메타바 */
+  .meta-bar {
+    display: flex; background: var(--white);
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 32px;
+  }
+  .meta-item { flex: 1; padding: 22px 26px; border-right: 1px solid var(--border); }
+  .meta-item:last-child { border-right: none; }
+  .meta-key { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 7px; }
+  .meta-val { font-size: 20px; font-weight: 700; }
+  .meta-val.green { color: var(--green-dark); }
+
+  /* D-day / 제출 기간 배너 */
+  .dday-bar {
+    background: var(--navy); border-radius: 12px;
+    padding: 28px 36px; display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 20px;
+  }
+  .dday-info { font-size: 15px; color: #7a8fa8; line-height: 1.6; flex: 1; }
+  .dday-row { margin-top: 10px; display: flex; flex-direction: column; gap: 12px; }
+  .dday-entry { display: flex; flex-direction: column; gap: 3px; }
+  .dday-entry-label { font-size: 12px; color: #5a7080; letter-spacing: 0.04em; font-weight: 500; text-transform: uppercase; }
+  .dday-period { font-size: 24px; font-weight: 700; color: white; letter-spacing: -0.3px; line-height: 1.2; }
+  .dday-period.green { font-size: 21px; color: var(--green); }
+  .period-sep { color: #7a8fa8; margin: 0 8px; font-weight: 300; }
+  .dday-divider-h { border: none; border-top: 1px solid #253047; margin: 2px 0; }
+  .dday-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+  .dday-chip { background: var(--green); color: white; font-size: 24px; font-weight: 700; padding: 12px 30px; border-radius: 100px; letter-spacing: 0.02em; }
+  .dday-sub { font-size: 13px; color: #5a7080; text-align: right; }
+
+  /* 콜아웃 */
+  .callout {
+    background: var(--green-light); border: 1px solid var(--green-mid);
+    border-radius: 10px; padding: 22px 26px; margin-bottom: 40px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 3px; }
+  .callout-body { font-size: 17px; color: #1a4a2e; line-height: 1.9; }
+  .callout-body strong { font-weight: 700; color: var(--green-dark); }
+
+  /* 섹션 */
+  .section { margin-bottom: 52px; }
+  .sec-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .sec-num {
+    width: 30px; height: 30px; background: var(--green); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .sec-title { font-size: 22px; font-weight: 700; }
+
+  /* 영상 카드 */
+  .video-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .video-thumb {
+    background: #1a2035; height: 300px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px; cursor: pointer; position: relative; overflow: hidden;
+  }
+  .video-thumb::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(3,199,90,0.07) 0%, transparent 70%); }
+  .play-circle {
+    width: 68px; height: 68px; background: var(--green); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .video-thumb:hover .play-circle { transform: scale(1.1); box-shadow: 0 0 0 16px rgba(3,199,90,0.12); }
+  .play-tri { width: 0; height: 0; border-style: solid; border-width: 12px 0 12px 22px; border-color: transparent transparent transparent white; margin-left: 4px; }
+  .video-label { font-size: 15px; color: rgba(255,255,255,0.4); position: relative; z-index: 1; }
+  .video-meta { padding: 22px 26px; border-top: 1px solid var(--border); }
+  .video-meta h3 { font-size: 19px; font-weight: 700; margin-bottom: 7px; }
+  .video-meta p { font-size: 16px; color: var(--text-muted); line-height: 1.75; }
+  .video-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+  .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+  /* 방법 카드 */
+  .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .method-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px;
+    transition: border-color 0.2s, box-shadow 0.2s; position: relative;
+  }
+  .method-card:hover { border-color: var(--green); box-shadow: 0 0 0 3px rgba(3,199,90,0.08); }
+  .method-card.primary { border-color: var(--green); }
+  .primary-badge {
+    position: absolute; top: -1px; right: 18px;
+    background: var(--green); color: white; font-size: 17px; font-weight: 700;
+    padding: 7px 18px; border-radius: 0 0 10px 10px; letter-spacing: 0.05em;
+  }
+  .method-icon { font-size: 36px; margin-bottom: 14px; }
+  .method-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+  .method-list { list-style: none; }
+  .method-list li { font-size: 17px; color: var(--text-sub); padding: 6px 0; line-height: 1.65; display: flex; align-items: flex-start; gap: 10px; }
+  .method-list li::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; flex-shrink: 0; margin-top: 9px; }
+
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* CTA */
+  .cta-block {
+    background: var(--green-light); border: 1px solid var(--green-mid);
+    border-radius: 14px; padding: 40px; text-align: center; margin-top: 44px;
+  }
+  .cta-block h2 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+  .cta-block p { font-size: 17px; color: var(--text-sub); margin-bottom: 26px; line-height: 1.8; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green); color: white; font-size: 20px; font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif; padding: 20px 50px; border-radius: 12px;
+    text-decoration: none; transition: background 0.15s, transform 0.15s;
+  }
+  .cta-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .cta-note { margin-top: 16px; font-size: 15px; color: var(--text-muted); }
+
+  /* 푸터 */
+  .footer { margin-left: 260px; background: var(--white); border-top: 1px solid var(--border); padding: 22px 52px; font-size: 15px; color: var(--text-muted); }
+
+  /* 플로팅 버튼 */
+  .floating-wrap { position: fixed; bottom: 32px; right: 32px; z-index: 200; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .floating-tip {
+    background: var(--navy); color: #ccd; font-size: 14px; padding: 7px 16px;
+    border-radius: 8px; white-space: nowrap; opacity: 0; transform: translateY(4px);
+    transition: opacity 0.2s, transform 0.2s; pointer-events: none; position: relative;
+  }
+  .floating-tip::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: var(--navy) transparent transparent; }
+  .floating-wrap:hover .floating-tip { opacity: 1; transform: translateY(0); }
+  .floating-btn-wrap { position: relative; }
+  .floating-btn {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--green); color: white; font-family: 'Noto Sans KR', sans-serif;
+    font-size: 20px; font-weight: 700; padding: 20px 36px; border-radius: 60px;
+    border: none; cursor: pointer; text-decoration: none;
+    box-shadow: 0 6px 28px rgba(3,199,90,0.55), 0 2px 8px rgba(0,0,0,0.15);
+    transition: background 0.15s, transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .floating-btn:hover {
+    background: var(--green-dark);
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 36px rgba(3,199,90,0.65), 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .floating-btn:active { transform: translateY(0) scale(0.98); }
+  .float-icon { font-size: 20px; }
+  .pulse-dot { position: absolute; top: -3px; right: -3px; width: 14px; height: 14px; background: #ff4757; border-radius: 50%; border: 3px solid white; animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,71,87,0.6); } 70% { box-shadow: 0 0 0 8px rgba(255,71,87,0); } 100% { box-shadow: 0 0 0 0 rgba(255,71,87,0); } }
+
+  /* 모바일 */
+  @media (max-width: 768px) {
+    .sidebar-overlay.open { background: rgba(0,0,0,0.5); }
+    .method-grid { grid-template-columns: 1fr; }
+    .meta-bar { flex-direction: column; }
+    .meta-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .meta-item:last-child { border-bottom: none; }
+    .content { padding: 28px 20px 120px; }
+    .footer { padding: 18px 20px; }
+    .floating-wrap { bottom: 20px; right: 20px; }
+    .page-title { font-size: 24px; }
+    .meta-val { font-size: 18px; }
+    .floating-btn { font-size: 18px; padding: 18px 28px; }
+  }
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.25s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+</style>
+</head>
+<body>
+
+<header class="top-header">
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+  <span style="font-size:18px;font-weight:700;color:white;">한솔마을 4단지 재건축 동의서 제출</span>
+</header>
+<div class="sidebar-overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<nav class="sidebar">
+  <div style="margin-bottom:8px;">
+    <div class="sb-label">안내</div>
+    <div class="sb-link active" onclick="window.scrollTo({top:0,behavior:'smooth'});setActive(this)">
+      <span class="sb-dot"></span> 동의서 제출 안내
+    </div>
+  </div>
+  <hr class="sb-hr">
+  <div style="margin-bottom:8px;">
+    <div class="sb-label">제출 방법</div>
+    <div class="sb-link" onclick="document.getElementById('sec1').scrollIntoView({behavior:'smooth'});setActive(this)">
+      <span class="sb-dot"></span> 방법 안내 영상
+    </div>
+    <div class="sb-link" onclick="document.getElementById('sec2').scrollIntoView({behavior:'smooth'});setActive(this)">
+      <span class="sb-dot"></span> 전자동의서 작성 영상
+    </div>
+    <div class="sb-link" onclick="document.getElementById('sec3').scrollIntoView({behavior:'smooth'});setActive(this)">
+      <span class="sb-dot"></span> 동의 방법 선택
+    </div>
+  </div>
+  <hr class="sb-hr">
+  <div>
+    <div class="sb-label">바로가기</div>
+    <a class="sb-link" href="https://www.buonestop.com/h/hansol4/member-info-verification/intro" target="_blank">
+      <span class="sb-dot"></span> 전자동의서 작성 →
+    </a>
+  </div>
+</nav>
+
+<main class="content">
+
+
+  <div class="page-title-block">
+
+    <h1 class="page-title">분당 2차 특별정비구역 지정 제안 동의서 제출 안내</h1>
+    <p class="page-desc">한솔마을 4단지 재건축 추진을 위한 동의서 제출 방법을 안내드립니다.<br>전자 또는 서면 방식 중 편리한 방법을 선택하여 참여해 주세요.</p>
+  </div>
+
+  <div class="meta-bar">
+    <div class="meta-item">
+      <div class="meta-key">제출 기간</div>
+      <div class="meta-val green">2026년 5월 2일 ~ 5월 31일</div>
+      <div style="margin-top:8px;font-size:16px;font-weight:600;color:#e03030;">※ 전자동의서는 2026년 5월 8일부터 가능합니다.</div>
+    </div>
+    <div class="meta-item"><div class="meta-key">대상 세대</div><div class="meta-val">1,651세대</div></div>
+    <div class="meta-item"><div class="meta-key">문의 전화 (재건축 추진위원회 대표번호)</div><div class="meta-val">010-5926-4459</div></div>
+  </div>
+
+
+
+  <div class="callout">
+    <div class="callout-body">분당 2차 특별정비구역 신청을 위해서는 소유자의 <strong>50% 이상</strong>의 동의가 필요합니다.<br>아래 영상으로 제출 방법을 먼저 확인하신 후 동의서를 제출해 주시기 바랍니다.</div>
+  </div>
+
+  <div class="section" id="sec1">
+    <div class="sec-header"><div class="sec-num">1</div><span class="sec-title">동의 방법 안내 영상</span></div>
+    <div class="video-card">
+      <!-- YouTube 삽입 시: video-thumb 삭제 후 아래 video-embed 주석 해제, VIDEO_ID_1 교체 -->
+      <div class="video-thumb">
+        <div class="play-circle"><div class="play-tri"></div></div>
+        <div class="video-label">영상 준비 중입니다</div>
+      </div>
+      <!-- <div class="video-embed"><iframe src="https://www.youtube.com/embed/VIDEO_ID_1" allowfullscreen></iframe></div> -->
+      <div class="video-meta">
+        <h3>두 가지 동의 방법 비교 안내</h3>
+        <p>서면 직접 제출과 전자동의 방식의 차이점, 준비 서류, 절차를 한눈에 설명합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="sec2">
+    <div class="sec-header"><div class="sec-num">2</div><span class="sec-title">전자동의서 작성 방법 영상</span></div>
+    <div class="video-card">
+      <div class="video-thumb" style="background:#101825;">
+        <div class="play-circle"><div class="play-tri"></div></div>
+        <div class="video-label">영상 준비 중입니다</div>
+      </div>
+      <!-- <div class="video-embed"><iframe src="https://www.youtube.com/embed/VIDEO_ID_2" allowfullscreen></iframe></div> -->
+      <div class="video-meta">
+        <h3>전자동의서 작성 단계별 가이드</h3>
+        <p>전자동의 시스템 접속부터 제출 완료까지 전 과정을 화면과 함께 안내합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section" id="sec3">
+    <div class="sec-header"><div class="sec-num">3</div><span class="sec-title">동의 방법 선택</span></div>
+    <div class="method-grid">
+      <div class="method-card primary">
+        <div class="primary-badge">권장</div>
+        <div class="method-icon">💻</div>
+        <h3>전자 동의 (온라인)</h3>
+        <ul class="method-list">
+          <li>본인 인증 후 온라인 제출</li>
+          <li>24시간 언제든지 가능</li>
+          <li>별도 방문 불필요</li>
+          <li>즉시 접수 확인 가능</li>
+        </ul>
+      </div>
+      <div class="method-card">
+        <div class="method-icon">📄</div>
+        <h3>서면 동의 (직접 제출)</h3>
+        <ul class="method-list">
+          <li>동의서 출력 또는 현장 수령</li>
+          <li>자필 서명 후 제출</li>
+          <li>관리사무소 2층 추진준비위원회 사무실로 방문 제출</li>
+          <li>필요 서류 지참 필수</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <h2>지금 바로 전자동의서 작성하기</h2>
+    <p>버튼을 클릭하면 전자동의서 작성 페이지로 이동합니다. 본인 인증이 필요합니다.</p>
+    <a href="https://www.buonestop.com/h/hansol4/member-info-verification/intro" target="_blank" class="cta-btn">✍ 전자동의서 작성하기</a>
+    <div class="cta-note">문의: 010-5926-4459 · 제출 기간: 2026년 5월 2일 ~ 5월 31일</div>
+  </div>
+</main>
+
+<footer class="footer">한솔마을 4단지 아파트 재건축 정비사업 조합 준비위원회 · 문의: 010-5926-4459 · 제출 기간: 2026년 5월 2일 ~ 5월 31일</footer>
+
+<div class="floating-wrap">
+  <div class="floating-tip">전자동의서 작성 페이지로 이동</div>
+  <div class="floating-btn-wrap">
+    <a href="https://www.buonestop.com/h/hansol4/member-info-verification/intro" target="_blank" class="floating-btn">
+      <div class="float-icon">✍</div> 전자동의서 작성하기
+    </a>
+    <div class="pulse-dot"></div>
+  </div>
+</div>
+
+<script>
+  function toggleMenu() {
+    var sidebar = document.querySelector('.sidebar');
+    var overlay = document.getElementById('overlay');
+    var hamburger = document.getElementById('hamburger');
+    var content = document.querySelector('.content');
+    var footer = document.querySelector('.footer');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+    hamburger.classList.toggle('open');
+    // PC에서도 콘텐츠 마진 조정
+    if (window.innerWidth > 768) {
+      if (sidebar.classList.contains('open')) {
+        content.style.marginLeft = '260px';
+        if (footer) footer.style.marginLeft = '260px';
+      } else {
+        content.style.marginLeft = '0';
+        if (footer) footer.style.marginLeft = '0';
+      }
+    }
+  }
+  function setActive(el) {
+    document.querySelectorAll('.sb-link').forEach(function(l){ l.classList.remove('active'); });
+    el.classList.add('active');
+    // 모바일에서 메뉴 클릭 시 자동 닫기
+    if (window.innerWidth <= 768) toggleMenu();
+  }
+  (function() {
+    var end = new Date('2026-05-31T23:59:59');
+    var diff = Math.ceil((end - new Date()) / (1000*60*60*24));
+    var chip = document.getElementById('dday-chip');
+    if (diff > 0) { chip.textContent = 'D-' + diff; }
+    else if (diff === 0) { chip.textContent = 'D-DAY'; chip.style.background='#ff4757'; }
+    else { chip.textContent='기간 종료'; chip.style.background='#888'; }
+  })();
+</script>
+</body>
+</html>
